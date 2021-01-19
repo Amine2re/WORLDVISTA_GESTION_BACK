@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.worldvista.Gestion.Pojo.fullUser;
 import com.worldvistaGestion.Dao.CompteRepository;
 import com.worldvistaGestion.Dao.UserRepository;
 import com.worldvistaGestion.Entities.Compte;
@@ -29,6 +30,10 @@ public class serviceUserAdmin {
 	public List<User> getAllUser(){
 		return userRepos.findAll();
 	};
+	
+	public Iterable<fullUser> getFullUserInformation(Long idUser) {
+		return userRepos.fullUserInfos(idUser);
+	}
 	
 	public boolean ceerUser(User user) {
 			

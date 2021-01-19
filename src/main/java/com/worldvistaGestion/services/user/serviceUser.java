@@ -1,6 +1,7 @@
 package com.worldvistaGestion.services.user;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Service;
 import com.worldvistaGestion.Dao.CompteRepository;
 import com.worldvistaGestion.Dao.ConnexionRepository;
 import com.worldvistaGestion.Dao.UserRepository;
+import com.worldvistaGestion.Dao.userConnectedRepository;
 import com.worldvistaGestion.Entities.Compte;
 import com.worldvistaGestion.Entities.Connexion;
 import com.worldvistaGestion.Entities.User;
+import com.worldvistaGestion.Entities.UserConnected;
 import com.worldvistaGestion.services.sup.serviceHoraire;
 
 @Service
@@ -31,13 +34,20 @@ public class serviceUser {
 	@Autowired
 	ConnexionRepository connexRepos;
 	
+	@Autowired
+	userConnectedRepository usrConnectedRepos;
+	
+	
 	Optional<User> userOpt;
 	Optional<Compte> compteOpt;
-	Connexion connexOpt;
+	Optional<Connexion> connexOpt;
 	User usr;
 	Compte compte;
 	Connexion connexion ;
 	String password;
+	Long actualDuree;
+
+	
 	
 	@PostConstruct
 	public void initialize() {
@@ -46,6 +56,29 @@ public class serviceUser {
 		connexion = new Connexion();
 	}
 	
+	public boolean fixDureeConnexion(Long idUser){
+		userOpt = userRepos.findById(idUser);
+		if(userOpt.isPresent()) {
+
+			List<Connexion> listConnexOpt = connexRepos.connexionByUser(idUser);
+			connexion = listConnexOpt.get(listConnexOpt.size()-1);
+			
+			if(connexion!=null) {
+				
+			  actualDuree = ChronoUnit.MINUTES.between(connexion.getHeureConnexion(), _serviceHoraire.heureActuelle());
+			  connexion.setDureeConnexion(actualDuree);
+
+			  connexRepos.save(connexion);
+			  
+			  return true;
+		  }
+		}
+		return false;
+	}
+	
+	public Object getUserInformations(Long idUser) {
+		return userRepos.findById(idUser);
+	}
 	public boolean connecter(Long idUser, String password) {
 		userOpt =  userRepos.findById(idUser);
 		if(userOpt.isPresent()) {
@@ -65,6 +98,9 @@ public class serviceUser {
 					
 					connexRepos.save(connexion);
 					
+					usrConnectedRepos.deleteAll();
+					usrConnectedRepos.save(new UserConnected(idUser));
+					
 					return true;
 				}
 			}
@@ -79,11 +115,13 @@ public class serviceUser {
 			compte.setStatutCompte(false);
 			comptRepos.save(compte);
 			connexion  = connexRepos.connexionByUserAndIdCompte(idUser, compte.getIdCompte());
-			System.out.println(connexion.getNbConnexion());
 			if(connexion!=null) {
-				Long difference = ChronoUnit.MINUTES.between(connexion.getHeureConnexion(),_serviceHoraire.heureActuelle());
-				connexion.setDureeConnexion(difference);
+				
+				Long differenceByMinute = ChronoUnit.MINUTES.between(connexion.getHeureConnexion(),_serviceHoraire.heureActuelle());
+					
+				connexion.setDureeConnexion(differenceByMinute);
 				connexRepos.save(connexion);
+				
 				return true ;
 			}
 		}
@@ -91,7 +129,9 @@ public class serviceUser {
 	};
 	public User updateMonProfil(User user) {
 		return userRepos.save(user);
-	};
+	}
+
+
 	
 	
 	

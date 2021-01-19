@@ -34,4 +34,9 @@ public class serviceCompte {
 		}
 		return false;
 	};
+	
+	public Object getCompteInformations(Long idUser) {
+		return comptRepos.findByIdUser(idUser);
+	}
+
 }

@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
 @Entity
 public class Transaction implements Serializable{
 
@@ -20,9 +21,11 @@ public class Transaction implements Serializable{
 	@Column
 	private String typeTransaction;
 	private Double mtTransaction;
+//	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDate dateTransaction;
 	private Long idUser;
 	private  boolean StatusTransaction;
+	private int commission;
 	
 	public Long getIdTransaction() {
 		return idTransaction;
@@ -72,7 +75,7 @@ public class Transaction implements Serializable{
 		StatusTransaction = statusTransaction;
 	}
 
-	public Transaction(Long idTransaction, String typeTransaction, Double mtTransaction, LocalDate dateTransaction,
+	public Transaction(Long idTransaction, int commission , String typeTransaction, Double mtTransaction, LocalDate dateTransaction,
 			Long idUser, boolean statusTransaction) {
 		super();
 		this.idTransaction = idTransaction;
@@ -80,12 +83,21 @@ public class Transaction implements Serializable{
 		this.mtTransaction = mtTransaction;
 		this.dateTransaction = dateTransaction;
 		this.idUser = idUser;
+		this.commission = commission;
 		StatusTransaction = statusTransaction;
 	}
 
 	public Transaction() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public int getCommission() {
+		return commission;
+	}
+
+	public void setCommission(int commission) {
+		this.commission = commission;
 	}
 
 }

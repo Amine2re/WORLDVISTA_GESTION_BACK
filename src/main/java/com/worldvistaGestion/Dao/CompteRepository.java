@@ -10,4 +10,5 @@ import com.worldvistaGestion.Entities.Compte;
 public interface CompteRepository extends CrudRepository<Compte, Long>{
 	@Query("select c from Compte c where c.idUser =:x")
 	Optional<Compte> findByIdUser(@Param("x") Long idUser);
+	
 }

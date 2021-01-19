@@ -7,12 +7,14 @@ public class transac {
 	private LocalDate dateTransaction;
 	private String typeTransaction;
 	private Double mtTransaction;
-	public transac(Long idTransaction, LocalDate dateTransaction, String typeTransaction, Double mtTransaction) {
+	private int commission;
+	public transac(Long idTransaction, LocalDate dateTransaction, String typeTransaction, Double mtTransaction , int commission) {
 		super();
 		this.idTransaction = idTransaction;
 		this.dateTransaction = dateTransaction;
 		this.typeTransaction = typeTransaction;
 		this.mtTransaction = mtTransaction;
+		this.commission = commission;
 	}
 	public Long getIdTransaction() {
 		return idTransaction;
@@ -37,6 +39,12 @@ public class transac {
 	}
 	public void setMtTransaction(Double mtTransaction) {
 		this.mtTransaction = mtTransaction;
+	}
+	public int getCommission() {
+		return commission;
+	}
+	public void setCommission(int commission) {
+		this.commission = commission;
 	}
 	
 }
