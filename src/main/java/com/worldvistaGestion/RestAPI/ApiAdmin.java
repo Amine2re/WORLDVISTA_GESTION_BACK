@@ -165,10 +165,7 @@ public class ApiAdmin {
 			return _serviceUser.getFullUserInformation(idUser); 	
 		}
 		
-		@GetMapping("getTimeStarted")
-		public Object getTimeStart() {
-			return null;
-		}
+		
 		
 //		Methods for Connexion
 		
